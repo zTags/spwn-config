@@ -3,7 +3,7 @@
 ### very cool
 
 ## usage
-if you're in the repo's root you can just run this command: `deno run --allow-read --allow-write src/index.ts <args>` <br>
+because deno is **very** sandboxed you need to specify these flags: `--allow-read --allow-write --allow-run`
 
 ## agruments
 `init` -> initialises a directory <br>

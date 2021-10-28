@@ -1,0 +1,6 @@
+{
+   "entry": "src/main.spwn",
+   "flags": [
+        ["--allow", "readfile"]
+   ]
+}

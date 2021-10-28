@@ -1,0 +1,4 @@
+let spwnenv = import "../libs/spwnenv.spwn";
+
+$.print(spwnenv.getKey("NUMBER"));
+$.print(spwnenv.getKey("STRING"));
