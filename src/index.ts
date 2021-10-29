@@ -65,7 +65,7 @@ async function newProj(name: string) {
     if (name == undefined) {
         console.log("please provide a name argument (spwnconfig new name)");
     } else {
-        Deno.mkdir(name);
+        await Deno.mkdir(name);
         Deno.chdir(name);
         setup();
     }
