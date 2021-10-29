@@ -1,7 +1,7 @@
 // ignore this
 const templates = {
     "config": "{\n   \"entry\": \"src/main.spwn\",\n   \"flags\": [\n        [\"--allow\", \"readfile\"]\n   ]\n}",
-    "spwnenv_lib": 'let getKey = (key: @string) {let spwnenv = $.readfile("../spwncfg/spwnenv");let typeOfKey = "";let keyValue = "";for keyLine in spwnenv.split("\\n") {if !keyLine.starts_with("#") {if keyLine.starts_with(key) {for keyCharacter in keyLine.split("") {if typeOfKey != "" {if typeOfKey == "string" {if keyCharacter == "\\"" {break;} else {keyValue = keyValue + keyCharacter;}} else if typeOfKey == "number" {keyValue = keyLine.replace(key + " =", ""); keyValue = keyValue.trim();}}}}; if keyCharacter == "\\"" {typeOfKey = "string";} else if keyCharacter.isdigit() {typeOfKey = "number";}}};return keyValue;};return { getKey };',
+    "spwnenv_lib": 'let getKey = (key: @string) {let spwnenv = $.readfile("../spwncfg/spwnenv");let typeOfKey = "";let keyValue = "";for keyLine in spwnenv.split("\\n") {if !keyLine.starts_with("#") {if keyLine.starts_with(key) {for keyCharacter in keyLine.split("") {if typeOfKey != "" {if typeOfKey == "string" {if keyCharacter == "\\"" {break;} else {keyValue = keyValue + keyCharacter;}} else if typeOfKey == "number" {keyValue = keyLine.replace(key + " =", ""); keyValue = keyValue.trim();}}; if keyCharacter == "\\"" {typeOfKey = "string";} else if keyCharacter.isdigit() {typeOfKey = "number";}}}}};return keyValue;};return { getKey };',
     "helloWorld": 'let spwnenv = import "../libs/spwnenv.spwn";\n\n$.print(spwnenv.getKey("NUMBER"));\n$.print(spwnenv.getKey("STRING"));',
     "spwnenv": "# KEY = VALUE\nNUMBER = 69\nSTRING = \"nice\"\n"
 }
