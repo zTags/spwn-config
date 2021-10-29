@@ -12,7 +12,7 @@ async function setup() {
         const configFolder = await Deno.mkdir("spwncfg");
     } catch (e) {
         if (e.toString().startsWith("AlreadyExists")) {
-            console.log("there was already an initalized .spwncfg here");
+            console.log("there was already an initalized spwncfg here");
         } else {
             console.log("error:");
             console.log(e);
@@ -26,6 +26,8 @@ async function setup() {
     const scfgenv = await Deno.writeTextFile("spwncfg/spwnenv", templates.spwnenv);
     const mainspwn = Deno.writeTextFile("src/main.spwn", templates.helloWorld);
     const spwnenvFile = await Deno.writeTextFile("libs/spwnenv.spwn", templates.spwnenv_lib);
+
+    console.log("Initialized a spwnenv in %s", Deno.cwd());
 }
 
 async function help() {
@@ -59,10 +61,25 @@ async function run() {
     console.log("--- stdout ---\n%s\n\n--- stderr ---\n%s", textDecoder.decode(stdout), textDecoder.decode(stderr));
 }
 
+async function newProj(name: string) {
+    if (name == undefined) {
+        console.log("please provide a name argument (spwnconfig new name)");
+    } else {
+        Deno.mkdir(name);
+        Deno.chdir(name);
+        setup();
+    }
+}
+
 async function main() {
     switch (Deno.args[0]) {
+        case "init":
+        case "initialize":
         case "setup":
             setup();
+            break;
+        case "new":
+            newProj(Deno.args[1]);
             break;
         case "run":
             run();
