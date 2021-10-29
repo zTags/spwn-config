@@ -7,4 +7,5 @@ because deno is **very** sandboxed you need to specify these flags: `--allow-rea
 
 ## agruments
 `init` -> initialises a directory <br>
-`run` -> runs using the specified spwnargs 
+`run` -> runs using the specified spwnargs <br>
+`new` -> creates a new project with a name
