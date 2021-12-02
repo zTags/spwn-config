@@ -1,9 +1,9 @@
 // ignore this
 const templates = {
     "config": "{\n   \"entry\": \"src/main.spwn\",\n   \"flags\": [\n        [\"--allow\", \"readfile\"]\n   ]\n}",
-    "spwnenv_lib": 'let getKey = (key: @string) {let spwnenv = $.readfile("../spwncfg/spwnenv");let typeOfKey = "";let keyValue = "";for keyLine in spwnenv.split("\\n") {if !keyLine.starts_with("#") {if keyLine.starts_with(key) {for keyCharacter in keyLine.split("") {if typeOfKey != "" {if typeOfKey == "string" {if keyCharacter == "\\"" {break;} else {keyValue = keyValue + keyCharacter;}} else if typeOfKey == "number" {keyValue = keyLine.replace(key + " =", ""); keyValue = keyValue.trim();}}; if keyCharacter == "\\"" {typeOfKey = "string";} else if keyCharacter.isdigit() {typeOfKey = "number";}}}}};return keyValue;};return { getKey };',
-    "helloWorld": 'let spwnenv = import "../libs/spwnenv.spwn";\n\n$.print(spwnenv.getKey("NUMBER"));\n$.print(spwnenv.getKey("STRING"));',
-    "spwnenv": "# KEY = VALUE\nNUMBER = 69\nSTRING = \"nice\"\n"
+    "spwnenv_lib": 'let get_key = (key: @string) {let spwnenv = $.readfile("../spwncfg/spwnenv");let typeOfKey = "";let keyValue = "";for keyLine in spwnenv.split("\\n") {if !keyLine.starts_with("#") {if keyLine.starts_with(key) {for keyCharacter in keyLine.split("") {if typeOfKey != "" {if typeOfKey == "string" {if keyCharacter == "\\"" {break;} else {keyValue = keyValue + keyCharacter;}} else if typeOfKey == "number" {keyValue = keyLine.replace(key + " =", ""); keyValue = keyValue.trim();}}; if keyCharacter == "\\"" {typeOfKey = "string";} else if keyCharacter.isdigit() {typeOfKey = "number";}}}}};return keyValue;};return { get_key };',
+    "helloWorld": 'let spwnenv = import "../libs/spwnenv.spwn";\n\n$.print(spwnenv.get_key("NUMBER"));\n$.print(spwnenv.get_key("STRING"));',
+    "spwnenv": "# KEY = VALUE\nNUMBER = 69\nSTRING = \"nice\"\n",
 }
 // ok you can start reading now
 
@@ -12,7 +12,7 @@ async function setup() {
         const configFolder = await Deno.mkdir("spwncfg");
     } catch (e) {
         if (e.toString().startsWith("AlreadyExists")) {
-            console.log("there was already an initalized spwncfg here");
+            console.log("there was already an initalized spwn-config here");
         } else {
             console.log("error:");
             console.log(e);
@@ -27,11 +27,11 @@ async function setup() {
     const mainspwn = Deno.writeTextFile("src/main.spwn", templates.helloWorld);
     const spwnenvFile = await Deno.writeTextFile("libs/spwnenv.spwn", templates.spwnenv_lib);
 
-    console.log("Initialized a spwnenv in %s", Deno.cwd());
+    console.log("Initialized a spwn-config in %s", Deno.cwd());
 }
 
 async function help() {
-    console.log("spwnconfig v0.1.0");
+    console.log("spwn-config v0.1.0");
     console.log("init - initialises a .spwncfg folder in your CWD");
     console.log("run - runs a spwn file with your arguments in your .spwncfg");
     console.log("");
@@ -51,19 +51,13 @@ async function run() {
         spwnCommand.push(element[0]);
         spwnCommand.push(element[1]);
     });
-    const p = Deno.run({ cmd: spwnCommand, stdout: "piped", stderr: "piped"});
-    const [status, stdout, stderr] = await Promise.all([
-        p.status(),
-        p.output(),
-        p.stderrOutput()
-      ]);
-    p.close();
-    console.log("--- stdout ---\n%s\n\n--- stderr ---\n%s", textDecoder.decode(stdout), textDecoder.decode(stderr));
+    const p = Deno.run({ cmd: spwnCommand, stdout: "inherit", stderr: "inherit"});
+    await p.status();
 }
 
 async function newProj(name: string) {
     if (name == undefined) {
-        console.log("please provide a name argument (spwnconfig new name)");
+        console.log("please provide a name argument (spwn-config new name)");
     } else {
         await Deno.mkdir(name);
         Deno.chdir(name);
@@ -94,4 +88,4 @@ async function main() {
     }
 }
 
-main()
+main();
