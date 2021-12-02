@@ -32,7 +32,7 @@ async function setup() {
 
 async function help() {
     console.log("spwn-config v0.1.0");
-    console.log("init - initialises a .spwncfg folder in your CWD");
+    console.log("init - initialises a spwncfg folder in your CWD");
     console.log("run - runs a spwn file with your arguments in your .spwncfg");
     console.log("");
 }
